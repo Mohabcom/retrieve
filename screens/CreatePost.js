@@ -33,7 +33,7 @@ function CreatePost({ route, navigation }) {
   // const richText = useRef();
 
   const userId = useSelector((state) => state.user._id);
-  const postId = route.params?.item?._id;
+  const postId = route.params?.post?._id;
 
   const [action, setAction] = useState("create");
 
@@ -55,14 +55,16 @@ function CreatePost({ route, navigation }) {
       setAction("edit");
       confirmDelete(postId, userId, oldImagePath);
     }
-    if (route.params?.item) {
-      // setPostId(route.params?.item._id);
-      setTitle(route.params?.item.title);
-      setDescription(route.params?.item.description);
-      setDuration(route.params?.item.duration);
-      setCategory(route.params?.item.category);
-      setOldImagePath(route.params?.item.imagePath);
-      setImage(route.params?.item.imageURL);
+    if (route.params?.post) {
+      // setPostId(route.params?.post._id);
+      setTitle(route.params?.post.title);
+      setDescription(route.params?.post.description);
+      setDuration(route.params?.post.duration);
+      setCategory(route.params?.post.category);
+      setOldImagePath(route.params?.post.image.imagePath);
+      setImage(route.params?.post.image.imageURL);
+      setImageWidth(route.params?.post.image.imageWidth);
+      setImageWidth(route.params?.post.image.imageHeight);
     }
   }, []);
 
@@ -77,7 +79,9 @@ function CreatePost({ route, navigation }) {
     duration,
     category,
     willUploadNewImage,
-    image
+    image,
+    imageWidth,
+    imageHeight
   ) => {
     let newPost = {};
     dispatch(setLoading(true));
@@ -97,7 +101,9 @@ function CreatePost({ route, navigation }) {
         duration,
         category,
         imagePath,
-        imageURL
+        imageURL,
+        imageWidth,
+        imageHeight
       );
       dispatch(setLoading(false));
       if (newPost) {
@@ -119,7 +125,9 @@ function CreatePost({ route, navigation }) {
     deleteOldImage,
     oldImagePath,
     willUploadNewImage,
-    image
+    image,
+    imageWidth,
+    imageHeight
   ) => {
     let updatedPost = {};
     dispatch(setLoading(true));
@@ -145,7 +153,9 @@ function CreatePost({ route, navigation }) {
           duration,
           category,
           imagePath,
-          imageURL
+          imageURL,
+          imageWidth,
+          imageHeight
         );
         dispatch(setPost({ post: updatedPost }));
       } else {
@@ -204,8 +214,8 @@ function CreatePost({ route, navigation }) {
 
   // Image Picker and Upload to firebase
   const [image, setImage] = useState("");
-  // const [imageWidth, setImageWidth] = useState(0);
-  // const [imageHeight, setImageHeight] = useState(0);
+  const [imageWidth, setImageWidth] = useState(0);
+  const [imageHeight, setImageHeight] = useState(0);
 
   const pickImage = async () => {
     try {
@@ -240,6 +250,8 @@ function CreatePost({ route, navigation }) {
       }
       setWillUploadNewImage(true);
       setImage(result.assets[0].uri);
+      setImageWidth(result.assets[0].width);
+      setImageHeight(result.assets[0].height);
     } catch (e) {
       Alert.alert(e);
     }
@@ -253,7 +265,7 @@ function CreatePost({ route, navigation }) {
     const uri = image;
     // const storage = getStorage();
     const filename = uri.substring(uri.lastIndexOf("/") + 1);
-    const reference = ref(storage, `postImages/${filename}`);
+    const reference = ref(storage, `postImages/${title}-${userId}/${filename}`);
 
     // Create Blob
     const blob = await new Promise((resolve, reject) => {
@@ -295,6 +307,8 @@ function CreatePost({ route, navigation }) {
       dispatch(setLoading(false));
     }, 15000);
     setImage(null);
+    setImageWidth(null);
+    setImageHeight(null);
 
     // function returns imagePath and the imageUrl variables as an object that can be destructured
     return { imagePath: newImagePath, imageURL };
@@ -488,19 +502,22 @@ function CreatePost({ route, navigation }) {
                 style={{ width: 150, height: 150, objectFit: "contain" }}
               />
               <Pressable
-                className="absolute bottom-0 bg-gray-400 opacity-50"
+                className="absolute bottom-0 bg-gray-400 opacity-50 z-50"
                 style={{ width: 150, height: 50 }}
                 onPress={() => {
+                  setImage(null);
                   if (action === "edit") {
                     setDeleteOldImage(true); // if clicked then the old image will be deleted on Applying the Edit
                   }
                   setWillUploadNewImage(false);
-                  setImage("");
+                  setImageWidth(null);
+                  setImageHeight(null);
                 }}
-              ></Pressable>
-              <View className="absolute flex justify-end items-center w-full h-full p-3">
-                <Ionicons name="trash-outline" size={22} color="#fff" />
-              </View>
+              >
+                <View className="absolute flex justify-end items-center w-full h-full p-3">
+                  <Ionicons name="trash-outline" size={22} color="#fff" />
+                </View>
+              </Pressable>
             </View>
           )}
           <Pressable
@@ -525,7 +542,9 @@ function CreatePost({ route, navigation }) {
                       duration,
                       category,
                       willUploadNewImage, // question: True or False
-                      image
+                      image,
+                      imageWidth,
+                      imageHeight
                     )
                   }
                   className="p-3 bg-[#7203FF] rounded"
@@ -552,7 +571,9 @@ function CreatePost({ route, navigation }) {
                       deleteOldImage, // question: True or False
                       oldImagePath, // Old Image Path for deletion
                       willUploadNewImage, // question: True or False
-                      image
+                      image,
+                      imageWidth,
+                      imageHeight
                     )
                   }
                   className="mb-2 p-3 bg-[#7203FF] rounded"

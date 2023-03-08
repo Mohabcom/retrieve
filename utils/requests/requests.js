@@ -164,7 +164,9 @@ export const createPost = async (
   duration,
   category,
   imagePath,
-  imageURL
+  imageURL,
+  imageWidth,
+  imageHeight
 ) => {
   try {
     if (!title) {
@@ -188,7 +190,17 @@ export const createPost = async (
     if (userId && title && description && duration && category) {
       const { data } = await axios.post(
         `${serverUrl}/posts`,
-        { userId, title, description, duration, category, imagePath, imageURL },
+        {
+          userId,
+          title,
+          description,
+          duration,
+          category,
+          imagePath,
+          imageURL,
+          imageWidth,
+          imageHeight,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -249,7 +261,9 @@ export const editPost = async (
   duration,
   category,
   imagePath,
-  imageURL
+  imageURL,
+  imageWidth,
+  imageHeight
 ) => {
   try {
     if (!title) {
@@ -273,7 +287,17 @@ export const editPost = async (
     if (postId && userId && title && description && duration && category) {
       const { data } = await axios.patch(
         `${serverUrl}/posts/${postId}`,
-        { userId, title, description, duration, category, imagePath, imageURL },
+        {
+          userId,
+          title,
+          description,
+          duration,
+          category,
+          imagePath,
+          imageURL,
+          imageWidth,
+          imageHeight,
+        },
         {
           headers: {
             "Content-Type": "application/json",

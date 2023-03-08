@@ -9,10 +9,13 @@ import { setPost } from "../redux/state";
 const PostHorizontal = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const item = props.item;
+  const post = props.item;
   const userId = useSelector((state) => state.user._id);
-  const isLiked = Boolean(item.likes[userId]);
-  const numOfLikes = Object.keys(item.likes).length;
+  const isLiked = Boolean(post.likes[userId]);
+  const numOfLikes = Object.keys(post.likes).length;
+  const imageAspectRatio = (
+    post.image.imageWidth / post.image.imageHeight
+  ).toFixed(2);
 
   const handleLikePost = async (postId, userId) => {
     const updatedPost = await likePost(postId, userId);
@@ -23,19 +26,25 @@ const PostHorizontal = (props) => {
     <View>
       <Pressable
         className="flex-row items-center justify-start overflow-hidden h-[200px] mx-0 my-2 border-2 border-gray-300 rounded-lg"
-        onPress={() => navigation.navigate("Post", { item })}
+        onPress={() => navigation.navigate("Post", { post })}
       >
-        <Image
-          className="w-[40%] h-[100%]"
-          source={
-            item.imagePath
-              ? { uri: item.imageURL ? item.imageURL : null }
-              : require("../assets/images//other/default_image.png")
-          }
-        />
+        <View className="h-full w-[40%] bg-gray-300 flex justify-center items-center">
+          {post.image.imageURL ? (
+            <Image
+              className="w-full h-auto"
+              style={{ aspectRatio: imageAspectRatio }}
+              source={{ uri: post.image.imageURL }}
+            />
+          ) : (
+            <Image
+              className="w-full h-full"
+              source={require("../assets/images//other/default_image.png")}
+            />
+          )}
+        </View>
 
         <Pressable
-          onPress={() => handleLikePost(item._id, userId)}
+          onPress={() => handleLikePost(post._id, userId)}
           className="absolute top-0 left-0 m-2 h-10 w-10"
         >
           <View className="w-full h-full flex-row justify-center items-center">
@@ -56,26 +65,26 @@ const PostHorizontal = (props) => {
             className="text-[18px] font-bold text-[#2D0C57]"
             numberOfLines={1}
           >
-            {item.title}
+            {post.title}
           </Text>
           <Text className="text-[#9586A8]">
             <Text className="text-[#2D0C57] font-bold ">Duration: </Text>{" "}
-            {item.duration} minutes
+            {post.duration} minutes
           </Text>
           <Text className="text-[#9586A8] mt-1">
             <Text className="text-[#2D0C57] font-bold ">Likes: </Text>{" "}
             {numOfLikes}
           </Text>
           <Text className="text-gray-800" numberOfLines={3}>
-            {item?.description}
+            {post?.description}
           </Text>
 
-          {userId === item?.author.userId && (
+          {userId === post?.author.userId && (
             <View className="flex-row gap-2 absolute top-0 right-0 p-2">
               <Pressable
                 onPress={() =>
                   navigation.navigate("Create Post", {
-                    item,
+                    post,
                     action: "delete",
                   })
                 }
@@ -89,7 +98,7 @@ const PostHorizontal = (props) => {
               <Pressable
                 onPress={() =>
                   navigation.navigate("Create Post", {
-                    item,
+                    post,
                     action: "edit",
                   })
                 }

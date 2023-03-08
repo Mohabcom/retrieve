@@ -15,40 +15,47 @@ import { setPost } from "../redux/state";
 import { useDispatch, useSelector } from "react-redux";
 
 const PostScreen = ({ route, navigation }) => {
-  const currentPostId = route.params.item._id;
+  const dispatch = useDispatch();
   const [currentPost, setCurrentPost] = useState({
-    post: route.params.item,
-    user: route.params.item.author,
+    post: route.params.post,
+    user: route.params.post.author,
   });
   useEffect(() => {
     const getPostOnLoaded = async (postId) => {
       const post = await getPost(postId);
       setCurrentPost(post);
     };
-    getPostOnLoaded(currentPostId);
+    getPostOnLoaded(currentPost.post._id);
   }, []);
 
   const { width, height } = Dimensions.get("screen");
-  const ITEM_WIDTH = width;
-  const ITEM_HEIGHT = height * 0.41;
-  const image = route.params.item.imageURL;
+  const imageAspectRatio = (
+    currentPost.post.image.imageWidth / currentPost.post.image.imageHeight
+  ).toFixed(2);
+  const imageToScreenWidthRatio =
+    ((width / currentPost.post.image.imageWidth) * 100) / 100;
+  const [displayedImageHeight, setDisplayedImageHeight] = useState(0);
+  // console.log(imageToScreenWidthRatio);
+  useEffect(() => {
+    let height = currentPost.post.image.imageHeight * imageToScreenWidthRatio;
+    if (height > 400) {
+      height = 400;
+    }
+    setDisplayedImageHeight(height);
+  }, []);
 
-  const dispatch = useDispatch();
-  const item = route.params.item;
+  const image = route.params.post.image.imageURL;
+
   const userId = useSelector((state) => state.user._id);
   const isLiked = Boolean(currentPost?.post?.likes[userId]);
   const numOfLikes = Object.keys(currentPost?.post?.likes).length;
 
   const handleLikePost = async (postId, userId) => {
-    // console.log(currentPost);
-    const prevPost = currentPost;
-    let updatedPost = {};
+    const { post, user } = currentPost;
+    let updatedPost = { post, user };
     updatedPost.post = await likePost(postId, userId);
-    // console.log(updatedPost);
-    updatedPost.user = prevPost.user;
     setCurrentPost(updatedPost);
     dispatch(setPost({ post: updatedPost.post }));
-    // console.log(currentPost.post.likes);
   };
 
   return (
@@ -82,18 +89,15 @@ const PostScreen = ({ route, navigation }) => {
         <View className="">
           <Image
             source={{ uri: image ? image : null }}
-            style={{
-              width: ITEM_WIDTH,
-              height: ITEM_HEIGHT,
-              resizeMode: "cover",
-            }}
+            className="w-[100%] max-h-[400] h-auto m-auto"
+            style={{ aspectRatio: imageAspectRatio }}
           />
         </View>
 
         <BottomSheet
           initialSnapIndex={0}
           snapPoints={
-            image ? [height - ITEM_HEIGHT - 30, height] : [height - 50]
+            image ? [height - displayedImageHeight - 82, height] : [height - 50]
           }
         >
           <BottomSheetScrollView
@@ -102,7 +106,7 @@ const PostScreen = ({ route, navigation }) => {
           >
             <Pressable
               onPress={() => handleLikePost(currentPost.post._id, userId)}
-              className="absolute top-0 right-0 m-8 mt-10 h-12 w-12"
+              className="absolute top-0 right-0 m-8 mt-10 h-12 w-12 z-50"
             >
               <View className="w-full h-full flex-row justify-center items-center">
                 <View className="absolute bg-gray-200 opacity-60 w-full h-full rounded-full"></View>
