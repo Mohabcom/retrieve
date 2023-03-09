@@ -169,24 +169,6 @@ export const createPost = async (
   imageHeight
 ) => {
   try {
-    if (!title) {
-      return Alert.alert("Error", "Title cannot be empty");
-    }
-    if (title.length < 6) {
-      return Alert.alert("Error", "Title is too short");
-    }
-    if (!description) {
-      return Alert.alert("Error", "Description cannot be empty");
-    }
-    if (description.length < 6) {
-      return Alert.alert("Error", "Description is too short");
-    }
-    if (!duration) {
-      return Alert.alert("Error", "Please provide the Duration");
-    }
-    if (duration > 360) {
-      return Alert.alert("Error", "Duration time is too long");
-    }
     if (userId && title && description && duration && category) {
       const { data } = await axios.post(
         `${serverUrl}/posts`,
@@ -266,24 +248,6 @@ export const editPost = async (
   imageHeight
 ) => {
   try {
-    if (!title) {
-      return Alert.alert("Error", "Title cannot be empty");
-    }
-    if (title.length < 6) {
-      return Alert.alert("Error", "Title is too short");
-    }
-    if (!description) {
-      return Alert.alert("Error", "Description cannot be empty");
-    }
-    if (description.length < 6) {
-      return Alert.alert("Error", "Description is too short");
-    }
-    if (!duration) {
-      return Alert.alert("Error", "Please provide the Duration");
-    }
-    if (duration > 360) {
-      return Alert.alert("Error", "Duration time is too long");
-    }
     if (postId && userId && title && description && duration && category) {
       const { data } = await axios.patch(
         `${serverUrl}/posts/${postId}`,

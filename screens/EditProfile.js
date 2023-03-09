@@ -19,7 +19,6 @@ import * as FileSystem from "expo-file-system";
 import { Picker } from "@react-native-picker/picker";
 import {
   getDownloadURL,
-  getStorage,
   ref,
   deleteObject,
   uploadBytesResumable,
@@ -87,10 +86,6 @@ const EditProfile = ({ route, navigation }) => {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    // Delete Old Image
-    if (oldImagePath && deleteOldImage) {
-      await deleteImage(oldImagePath);
-    }
     try {
       // Upload Image
       const { profilePicturePath, profilePictureURL } = willUploadNewImage
@@ -130,6 +125,10 @@ const EditProfile = ({ route, navigation }) => {
         if (updatedProfile) {
           dispatch(setSignIn({ user: updatedProfile }));
         }
+      }
+      // Delete Old Image
+      if (oldImagePath && deleteOldImage) {
+        await deleteImage(oldImagePath);
       }
       dispatch(setLoading(false));
       navigation.navigate(isSurveyDone ? "Home Screen" : "Survey");
@@ -186,9 +185,8 @@ const EditProfile = ({ route, navigation }) => {
     setUploading(true);
     dispatch(setLoading(false));
     const uri = image;
-    // const storage = getStorage();
     const filename = uri.substring(uri.lastIndexOf("/") + 1);
-    const reference = ref(storage, `userImages/${userId}/${filename}`);
+    const reference = ref(storage, `userImages/${userId}_${filename}`);
 
     // Create Blob
     const blob = await new Promise((resolve, reject) => {
@@ -227,7 +225,6 @@ const EditProfile = ({ route, navigation }) => {
     const imageURL = await getDownloadURL(urlreference).then((x) => {
       return x;
     });
-    console.log("created download url!!");
 
     blob.close();
     setUploading(false);
@@ -242,12 +239,33 @@ const EditProfile = ({ route, navigation }) => {
   };
   // Delete Image
   const deleteImage = async (imagePath) => {
-    // const storage = getStorage();
     const imageRef = ref(storage, imagePath);
     try {
       await deleteObject(imageRef);
     } catch (error) {
       return Alert.alert(error.message);
+    }
+  };
+
+  const chooseImageOptions = () => {
+    if (image) {
+      return Alert.alert("", "", [
+        {
+          text: "Delete Current Image",
+          style: "Cancel",
+          onPress: () => {
+            setImage(null);
+            setDeleteOldImage(true); // if clicked then the old image will be deleted on Applying the Edit
+            setWillUploadNewImage(false);
+          },
+        },
+        {
+          text: "Change Current Image",
+          onPress: () => pickImage(),
+        },
+      ]);
+    } else {
+      return pickImage();
     }
   };
   return (
@@ -319,7 +337,7 @@ const EditProfile = ({ route, navigation }) => {
         <View className="w-screen mt-4 flex-row items-center justify-center mb-2">
           <Pressable
             onPress={() => {
-              pickImage();
+              chooseImageOptions();
             }}
             className="p-1 border-2 border-transparent rounded"
           >

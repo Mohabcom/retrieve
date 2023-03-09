@@ -65,7 +65,7 @@ function CreatePost({ route, navigation }) {
       setOldImagePath(route.params?.post.image.imagePath);
       setImage(route.params?.post.image.imageURL);
       setImageWidth(route.params?.post.image.imageWidth);
-      setImageWidth(route.params?.post.image.imageHeight);
+      setImageHeight(route.params?.post.image.imageHeight);
     }
   }, []);
 
@@ -84,6 +84,24 @@ function CreatePost({ route, navigation }) {
     imageWidth,
     imageHeight
   ) => {
+    if (!title) {
+      return Alert.alert("Error", "Title cannot be empty");
+    }
+    if (title.length < 6) {
+      return Alert.alert("Error", "Title is too short");
+    }
+    if (!description) {
+      return Alert.alert("Error", "Description cannot be empty");
+    }
+    if (description.length < 6) {
+      return Alert.alert("Error", "Description is too short");
+    }
+    if (!duration) {
+      return Alert.alert("Error", "Please provide the Duration");
+    }
+    if (duration > 360) {
+      return Alert.alert("Error", "Duration time is too long");
+    }
     let newPost = {};
     dispatch(setLoading(true));
     setTimeout(() => {
@@ -135,6 +153,24 @@ function CreatePost({ route, navigation }) {
     imageWidth,
     imageHeight
   ) => {
+    if (!title) {
+      return Alert.alert("Error", "Title cannot be empty");
+    }
+    if (title.length < 6) {
+      return Alert.alert("Error", "Title is too short");
+    }
+    if (!description) {
+      return Alert.alert("Error", "Description cannot be empty");
+    }
+    if (description.length < 6) {
+      return Alert.alert("Error", "Description is too short");
+    }
+    if (!duration) {
+      return Alert.alert("Error", "Please provide the Duration");
+    }
+    if (duration > 360) {
+      return Alert.alert("Error", "Duration time is too long");
+    }
     let updatedPost = {};
     dispatch(setLoading(true));
     setTimeout(() => {
@@ -142,7 +178,7 @@ function CreatePost({ route, navigation }) {
     }, 15000);
     try {
       // Upload Image
-      const { imagePath, imageURL } = willUploadNewImage
+      let { imagePath, imageURL } = willUploadNewImage
         ? await uploadImage(image)
         : { imagePath: "", imageURL: "" };
 
@@ -166,13 +202,20 @@ function CreatePost({ route, navigation }) {
         );
         dispatch(setPost({ post: updatedPost }));
       } else {
+        imagePath = oldImagePath;
+        imageURL = image;
+
         updatedPost = await editPost(
           postId,
           userId,
           title,
           description,
           duration,
-          category
+          category,
+          imagePath,
+          imageURL,
+          imageWidth,
+          imageHeight
         );
         dispatch(setPost({ post: updatedPost }));
       }
@@ -181,7 +224,7 @@ function CreatePost({ route, navigation }) {
         await deleteImage(oldImagePath);
       }
       dispatch(setLoading(false));
-      if (newPost) {
+      if (updatedPost) {
         navigation.navigate("Home Screen");
       }
     } catch (error) {
@@ -209,7 +252,7 @@ function CreatePost({ route, navigation }) {
     }
   };
 
-  const confirmDelete = (postId, userId, oldImagePath) =>
+  const confirmDelete = (postId, userId, oldImagePath) => {
     Alert.alert(
       "Are you sure?",
       "Deleting a Post cannot be undone, are you sure you want to delete this post?",
@@ -224,6 +267,7 @@ function CreatePost({ route, navigation }) {
         },
       ]
     );
+  };
 
   // Image Picker and Upload to firebase
   const [image, setImage] = useState("");
@@ -276,9 +320,8 @@ function CreatePost({ route, navigation }) {
     setUploading(true);
     dispatch(setLoading(false));
     const uri = image;
-    // const storage = getStorage();
     const filename = uri.substring(uri.lastIndexOf("/") + 1);
-    const reference = ref(storage, `postImages/${title}-${userId}/${filename}`);
+    const reference = ref(storage, `postImages/${title}_${userId}_${filename}`);
 
     // Create Blob
     const blob = await new Promise((resolve, reject) => {
@@ -334,7 +377,6 @@ function CreatePost({ route, navigation }) {
   };
   // Delete Image
   const deleteImage = async (imagePath) => {
-    // const storage = getStorage();
     const imageRef = ref(storage, imagePath);
     try {
       await deleteObject(imageRef);
