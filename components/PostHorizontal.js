@@ -32,7 +32,9 @@ const PostHorizontal = (props) => {
           {post.image.imageURL ? (
             <Image
               className="w-full h-auto"
-              style={{ aspectRatio: imageAspectRatio }}
+              style={{
+                aspectRatio: post.image?.imageWidth ? imageAspectRatio : 1,
+              }}
               source={{ uri: post.image.imageURL }}
             />
           ) : (

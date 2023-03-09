@@ -32,7 +32,9 @@ const PostVertical = (props) => {
           {post.image.imageURL ? (
             <Image
               className="w-[100%] max-h-[230] h-auto"
-              style={{ aspectRatio: imageAspectRatio }}
+              style={{
+                aspectRatio: post.image?.imageWidth ? imageAspectRatio : 1,
+              }}
               source={{ uri: post.image.imageURL }}
             />
           ) : (

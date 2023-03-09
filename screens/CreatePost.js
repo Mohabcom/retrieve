@@ -369,8 +369,8 @@ function CreatePost({ route, navigation }) {
       dispatch(setLoading(false));
     }, 15000);
     setImage(null);
-    setImageWidth(null);
-    setImageHeight(null);
+    setImageWidth(0);
+    setImageHeight(0);
 
     // function returns imagePath and the imageUrl variables as an object that can be destructured
     return { imagePath: newImagePath, imageURL };
@@ -571,8 +571,8 @@ function CreatePost({ route, navigation }) {
                     setDeleteOldImage(true); // if clicked then the old image will be deleted on Applying the Edit
                   }
                   setWillUploadNewImage(false);
-                  setImageWidth(null);
-                  setImageHeight(null);
+                  setImageWidth(0);
+                  setImageHeight(0);
                 }}
               >
                 <View className="absolute flex justify-end items-center w-full h-full p-3">

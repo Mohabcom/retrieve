@@ -3,7 +3,7 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
 
-const AboutScreen = ({ route, navigation }) => {
+const AboutScreen = ({ navigation }) => {
   const aboutData = useSelector((state) => state.appData.aboutData);
 
   return (

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  welcomeScreenTitle: "",
+  welcomeScreenTitle: "Welcome to Retrieve! 👋",
   welcomeScreenDesc:
     "Retrieve is a student-led campaign aimed at raising awareness of the importance of preserving and protecting the environment. We are striving to make a positive impact on the world by encouraging people to use green and sustainable practices.",
   walkthroughScreenSlides: [

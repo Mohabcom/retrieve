@@ -90,7 +90,9 @@ const PostScreen = ({ route, navigation }) => {
           <Image
             source={{ uri: image ? image : null }}
             className="w-[100%] max-h-[400] h-auto m-auto"
-            style={{ aspectRatio: imageAspectRatio }}
+            style={{
+              aspectRatio: currentPost.image?.imageWidth ? imageAspectRatio : 1,
+            }}
           />
         </View>
 
