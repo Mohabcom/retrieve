@@ -30,6 +30,7 @@ import { storage } from "../utils/firebase-config";
 
 function CreatePost({ route, navigation }) {
   const dispatch = useDispatch();
+  // const [cancelCurrent, setCancelCurrent] = useState(false);
   // const richText = useRef();
 
   const userId = useSelector((state) => state.user._id);
@@ -93,6 +94,10 @@ function CreatePost({ route, navigation }) {
       const { imagePath, imageURL } = willUploadNewImage
         ? await uploadImage(image)
         : { imagePath: "", imageURL: "" };
+      // if (cancelCurrent === true) {
+      //   dispatch(setLoading(false));
+      //   return;
+      // }
 
       newPost = await createPost(
         userId,
@@ -136,14 +141,15 @@ function CreatePost({ route, navigation }) {
       dispatch(setLoading(false));
     }, 15000);
     try {
-      // Delete Old Image
-      if (oldImagePath && deleteOldImage) {
-        await deleteImage(oldImagePath);
-      }
       // Upload Image
       const { imagePath, imageURL } = willUploadNewImage
         ? await uploadImage(image)
         : { imagePath: "", imageURL: "" };
+
+      // if (cancelCurrent === true) {
+      //   dispatch(setLoading(false));
+      //   return;
+      // }
 
       if (willUploadNewImage || deleteOldImage) {
         updatedPost = await editPost(
@@ -169,6 +175,10 @@ function CreatePost({ route, navigation }) {
           category
         );
         dispatch(setPost({ post: updatedPost }));
+      }
+      // Delete Old Image
+      if (oldImagePath && deleteOldImage) {
+        await deleteImage(oldImagePath);
       }
       dispatch(setLoading(false));
       if (newPost) {
@@ -206,7 +216,7 @@ function CreatePost({ route, navigation }) {
       [
         {
           text: "No",
-          style: "cancel",
+          style: "Cancel",
         },
         {
           text: "Yes",
@@ -294,6 +304,12 @@ function CreatePost({ route, navigation }) {
       setProgress(progress / 100);
     });
 
+    // if (cancelCurrent === true) {
+    //   uploadTask.cancel();
+    //   setUploading(false);
+    //   return;
+    // }
+
     const newImagePath = (await uploadFile).metadata.fullPath;
 
     const urlreference = ref(storage, newImagePath);
@@ -352,16 +368,16 @@ function CreatePost({ route, navigation }) {
               style={{ width: 120, height: 120 }}
               className="mt-10"
             />
-            <Pressable
+            {/* <Pressable
               onPress={() => {
-                setUploading(false);
+                setCancelCurrent(true);
               }}
-              className="my-2 p-3 border-2 border-transparent rounded"
+              className="my-2 p-3 border-2 border-transparent rounded z-50"
             >
               <Text className="text-[#7203FF] text-[20px] text-center">
                 Cancel
               </Text>
-            </Pressable>
+            </Pressable> */}
           </View>
         </View>
       )}

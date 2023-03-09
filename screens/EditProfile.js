@@ -30,6 +30,7 @@ import { storage } from "../utils/firebase-config";
 
 const EditProfile = ({ route, navigation }) => {
   const dispatch = useDispatch();
+  // const [cancelCurrent, setCancelCurrent] = useState(false);
   // const richText = useRef();
 
   const userId = useSelector((state) => state.user._id);
@@ -96,6 +97,11 @@ const EditProfile = ({ route, navigation }) => {
         ? await uploadImage(image)
         : { profilePicturePath: "", profilePictureURL: "" };
 
+      // if (cancelCurrent === true) {
+      //   dispatch(setLoading(false));
+      //   return;
+      // }
+
       if (willUploadNewImage || deleteOldImage) {
         const updatedProfile = await updateProfile(
           userId,
@@ -140,10 +146,10 @@ const EditProfile = ({ route, navigation }) => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        // allowsEditing: true,
+        allowsEditing: true,
         // allowsMultipleSelection: true,
         // selectionLimit: 6,
-        // aspect: [4, 3],
+        aspect: [1, 1],
         quality: 0.3,
       });
 
@@ -208,6 +214,11 @@ const EditProfile = ({ route, navigation }) => {
       setProgress(progress / 100);
     });
 
+    // if (cancelCurrent === true) {
+    //   uploadTask.cancel();
+    //   setUploading(false);
+    //   return;
+    // }
     const newImagePath = (await uploadFile).metadata.fullPath;
 
     const urlreference = ref(storage, newImagePath);
@@ -264,16 +275,17 @@ const EditProfile = ({ route, navigation }) => {
               style={{ width: 120, height: 120 }}
               className="mt-10"
             />
-            <Pressable
+            {/* <Pressable
               onPress={() => {
-                setUploading(false);
+                setCancelCurrent(true);
+                console.log(cancelCurrent);
               }}
-              className="my-2 p-3 border-2 border-transparent rounded"
+              className="my-2 p-3 border-2 border-transparent rounded z-50"
             >
               <Text className="text-[#7203FF] text-[20px] text-center">
                 Cancel
               </Text>
-            </Pressable>
+            </Pressable> */}
           </View>
         </View>
       )}
