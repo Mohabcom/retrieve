@@ -7,6 +7,7 @@ import { selectIsLoggedIn } from "../redux/state/auth";
 import { setAppData } from "../redux/state/appData";
 import { useState } from "react";
 import { getServerState, getAppData } from "../utils/requests/requests";
+import NetInfo from "@react-native-community/netinfo";
 
 const MainStackNavigator = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,18 @@ const MainStackNavigator = () => {
     }
   };
   useState(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (!state.isConnected === true) {
+        Alert.alert(
+          "No Internet Connection",
+          "Please Check your Internet Connection.",
+          [],
+          { cancelable: false }
+        );
+      }
+    });
+    unsubscribe();
+
     onAppLoad();
   }, []);
 
