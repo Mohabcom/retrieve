@@ -133,19 +133,23 @@ const AboutScreen = ({ route, navigation }) => {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    const updatedProfile = await updateProfile(
-      userId,
-      fullName,
-      about,
-      address,
-      dateOfBirth,
-      gender,
-      isSurveyDone
-    );
-    if (updatedProfile) {
-      dispatch(setSignIn({ user: updatedProfile }));
+    try {
+      const updatedProfile = await updateProfile(
+        userId,
+        fullName,
+        about,
+        address,
+        dateOfBirth,
+        gender,
+        isSurveyDone
+      );
+      if (updatedProfile) {
+        dispatch(setSignIn({ user: updatedProfile }));
+      }
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
     }
-    dispatch(setLoading(false));
   };
 
   const handleButton = () => {

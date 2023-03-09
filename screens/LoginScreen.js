@@ -15,7 +15,6 @@ import {
 import { useDispatch } from "react-redux";
 import { setSignIn, setLoading } from "../redux/state";
 import { login, register } from "../utils/requests/requests";
-import Loading from "../components/Loading";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -29,22 +28,25 @@ const LoginScreen = () => {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    const data = await login(email, password);
-    const user = data
-      ? {
-          user: data.user,
-        }
-      : {};
-    if (data.user.verified) {
-      dispatch(setSignIn(user));
-    } else {
-      navigation.navigate("OTPVerification", { data });
+    try {
+      const data = await login(email, password);
+      const user = data
+        ? {
+            user: data.user,
+          }
+        : {};
+      if (data.user.verified) {
+        dispatch(setSignIn(user));
+      } else {
+        navigation.navigate("OTPVerification", { data });
+      }
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
     }
-    dispatch(setLoading(false));
   };
   return (
     <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false}>
-      <Loading />
       <View className="flex-1 justify-center items-center h-screen w-screen bg-white mt-7">
         <View className="flex justify-center items-center ">
           <Image

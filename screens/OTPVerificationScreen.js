@@ -71,9 +71,13 @@ const OTPVerificationScreen = ({ route }) => {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    setCode("");
-    await sendNewOTPEmail(_id, email);
-    dispatch(setLoading(false));
+    try {
+      setCode("");
+      await sendNewOTPEmail(_id, email);
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+    }
   };
 
   const handleVerify = async (_id, otp) => {
@@ -81,14 +85,18 @@ const OTPVerificationScreen = ({ route }) => {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    const data = await verifyOTP(_id, otp);
-    const user = data
-      ? {
-          user: data.user,
-        }
-      : {};
-    dispatch(setSignIn(user));
-    dispatch(setLoading(false));
+    try {
+      const data = await verifyOTP(_id, otp);
+      const user = data
+        ? {
+            user: data.user,
+          }
+        : {};
+      dispatch(setSignIn(user));
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+    }
   };
 
   return (

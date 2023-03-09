@@ -88,12 +88,12 @@ function CreatePost({ route, navigation }) {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    // Upload Image
-    const { imagePath, imageURL } = willUploadNewImage
-      ? await uploadImage(image)
-      : { imagePath: "", imageURL: "" };
-
     try {
+      // Upload Image
+      const { imagePath, imageURL } = willUploadNewImage
+        ? await uploadImage(image)
+        : { imagePath: "", imageURL: "" };
+
       newPost = await createPost(
         userId,
         title,
@@ -110,6 +110,7 @@ function CreatePost({ route, navigation }) {
         navigation.replace("Home Screen");
       }
     } catch (error) {
+      dispatch(setLoading(false));
       // Alert.alert("Error", error.message);
     }
   };
@@ -134,16 +135,16 @@ function CreatePost({ route, navigation }) {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    // Delete Old Image
-    if (oldImagePath && deleteOldImage) {
-      await deleteImage(oldImagePath);
-    }
-    // Upload Image
-    const { imagePath, imageURL } = willUploadNewImage
-      ? await uploadImage(image)
-      : { imagePath: "", imageURL: "" };
-
     try {
+      // Delete Old Image
+      if (oldImagePath && deleteOldImage) {
+        await deleteImage(oldImagePath);
+      }
+      // Upload Image
+      const { imagePath, imageURL } = willUploadNewImage
+        ? await uploadImage(image)
+        : { imagePath: "", imageURL: "" };
+
       if (willUploadNewImage || deleteOldImage) {
         updatedPost = await editPost(
           postId,
@@ -174,6 +175,7 @@ function CreatePost({ route, navigation }) {
         navigation.navigate("Home Screen");
       }
     } catch (error) {
+      dispatch(setLoading(false));
       // Alert.alert(error.message);
     }
   };
@@ -184,14 +186,15 @@ function CreatePost({ route, navigation }) {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    if (oldImagePath) {
-      deleteImage(oldImagePath);
-    }
     try {
+      if (oldImagePath) {
+        deleteImage(oldImagePath);
+      }
       await deletePost(postId, userId);
       dispatch(setLoading(false));
       navigation.replace("Home Screen");
     } catch (error) {
+      dispatch(setLoading(false));
       // alert(error.message);
     }
   };
@@ -260,8 +263,8 @@ function CreatePost({ route, navigation }) {
   const [progress, setProgress] = useState(0);
 
   const uploadImage = async (image) => {
-    dispatch(setLoading(false));
     setUploading(true);
+    dispatch(setLoading(false));
     const uri = image;
     // const storage = getStorage();
     const filename = uri.substring(uri.lastIndexOf("/") + 1);
@@ -331,7 +334,7 @@ function CreatePost({ route, navigation }) {
 
       {/* UPLOADING OVERLAY */}
       {uploading && (
-        <View>
+        <View className="z-50">
           <View className="absolute bg-gray-200 opacity-95 w-screen h-screen z-50"></View>
           <View className="absolute w-screen h-screen z-50 flex justify-center items-center">
             <Text className="text-2xl font-bold text-center text-[#7203FF] my-5">

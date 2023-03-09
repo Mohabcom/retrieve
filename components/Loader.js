@@ -1,7 +1,7 @@
 import { View, ActivityIndicator, Modal } from "react-native";
 import { useSelector } from "react-redux";
 
-const Loading = ({ routes, navigation }) => {
+const Loader = ({ routes, navigation }) => {
   const loading = useSelector((state) => state.loading);
   return (
     <Modal
@@ -19,4 +19,4 @@ const Loading = ({ routes, navigation }) => {
   );
 };
 
-export default Loading;
+export default Loader;

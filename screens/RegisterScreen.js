@@ -29,10 +29,14 @@ const RegisterScreen = () => {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 15000);
-    const data = await register(email, password, userName);
-    dispatch(setLoading(false));
-    if (data) {
-      navigation.navigate("OTPVerification", { data });
+    try {
+      const data = await register(email, password, userName);
+      dispatch(setLoading(false));
+      if (data) {
+        navigation.navigate("OTPVerification", { data });
+      }
+    } catch (error) {
+      dispatch(setLoading(false));
     }
   };
 

@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PersistGate } from "redux-persist/integration/react";
-import Loading from "./components/Loading";
+import Loader from "./components/Loader";
 import { Text } from "react-native";
 import { useState } from "react";
 import { getServerState } from "./utils/requests/requests";
@@ -29,7 +29,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
-          <Loading />
+          <Loader />
           <MainNavigator />
           <StatusBar style="auto" />
         </PersistGate>

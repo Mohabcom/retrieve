@@ -90,12 +90,12 @@ const EditProfile = ({ route, navigation }) => {
     if (oldImagePath && deleteOldImage) {
       await deleteImage(oldImagePath);
     }
-    // Upload Image
-    const { profilePicturePath, profilePictureURL } = willUploadNewImage
-      ? await uploadImage(image)
-      : { profilePicturePath: "", profilePictureURL: "" };
-
     try {
+      // Upload Image
+      const { profilePicturePath, profilePictureURL } = willUploadNewImage
+        ? await uploadImage(image)
+        : { profilePicturePath: "", profilePictureURL: "" };
+
       if (willUploadNewImage || deleteOldImage) {
         const updatedProfile = await updateProfile(
           userId,
@@ -128,6 +128,7 @@ const EditProfile = ({ route, navigation }) => {
       dispatch(setLoading(false));
       navigation.navigate(isSurveyDone ? "Home Screen" : "Survey");
     } catch (error) {
+      dispatch(setLoading(false));
       // Alert.alert(error.message);
     }
   };
@@ -176,8 +177,8 @@ const EditProfile = ({ route, navigation }) => {
   const [progress, setProgress] = useState(0);
 
   const uploadImage = async (image) => {
-    dispatch(setLoading(false));
     setUploading(true);
+    dispatch(setLoading(false));
     const uri = image;
     // const storage = getStorage();
     const filename = uri.substring(uri.lastIndexOf("/") + 1);
@@ -245,7 +246,7 @@ const EditProfile = ({ route, navigation }) => {
 
       {/* UPLOADING OVERLAY */}
       {uploading && (
-        <View>
+        <View className="z-50">
           <View className="absolute bg-gray-200 opacity-95 w-screen h-screen z-50"></View>
           <View className="absolute w-screen h-screen z-50 flex justify-center items-center">
             <Text className="text-2xl font-bold text-center text-[#7203FF] my-5">

@@ -68,12 +68,7 @@ const CategoriesScreen = ({ navigation }) => {
 
   useEffect(() => {
     const categorizeWhenPageLoaded = async () => {
-      dispatch(setLoading(true));
-      setTimeout(() => {
-        dispatch(setLoading(false));
-      }, 15000);
       await categorizeAllPosts();
-      dispatch(setLoading(false));
     };
     categorizeWhenPageLoaded();
   }, []);
