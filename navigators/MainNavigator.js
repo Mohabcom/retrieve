@@ -23,14 +23,15 @@ const MainStackNavigator = () => {
         [],
         { cancelable: false }
       );
-    }
-    try {
-      await getServerState();
-      const data = await getAppData();
-      dispatch(setAppData(data));
-      return data;
-    } catch (error) {
-      console.log(error);
+    } else {
+      try {
+        await getServerState();
+        const data = await getAppData();
+        dispatch(setAppData(data));
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
