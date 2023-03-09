@@ -13,6 +13,17 @@ import { Alert } from "react-native";
 const MainStackNavigator = () => {
   const dispatch = useDispatch();
   const onAppLoad = async () => {
+    const isConnected = await NetInfo.fetch().then((state) => {
+      return state.isConnected;
+    });
+    if (!isConnected === true) {
+      return Alert.alert(
+        "No Internet Connection",
+        "Please Check your Internet Connection.",
+        [],
+        { cancelable: false }
+      );
+    }
     try {
       await getServerState();
       const data = await getAppData();
@@ -22,19 +33,8 @@ const MainStackNavigator = () => {
       console.log(error);
     }
   };
-  useState(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      if (!state.isConnected === true) {
-        Alert.alert(
-          "No Internet Connection",
-          "Please Check your Internet Connection.",
-          [],
-          { cancelable: false }
-        );
-      }
-    });
-    unsubscribe();
 
+  useState(() => {
     onAppLoad();
   }, []);
 
