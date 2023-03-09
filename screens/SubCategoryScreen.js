@@ -18,7 +18,7 @@ const SubCategoryScreen = ({ route }) => {
   const navigation = useNavigation();
   const [search, setSearch] = useState("");
 
-  const allPosts = useSelector((state) => state.posts);
+  const allPosts = useSelector((state) => state.auth.posts);
   const [categoryPosts, setCategoryPosts] = useState([]);
   const selectedCategory =
     route.params.category.charAt(0).toUpperCase() +

@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { setLoading, setSignIn } from "../redux/state";
+import { setLoading, setSignIn } from "../redux/state/auth";
 import { verifyOTP, sendNewOTPEmail } from "../utils/requests/requests";
 
 const OTPVerificationScreen = ({ route }) => {

@@ -11,7 +11,7 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { getPost, likePost } from "../utils/requests/requests";
 // import RenderHtml from "react-native-render-html";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { setPost } from "../redux/state";
+import { setPost } from "../redux/state/auth";
 import { useDispatch, useSelector } from "react-redux";
 
 const PostScreen = ({ route, navigation }) => {
@@ -46,7 +46,7 @@ const PostScreen = ({ route, navigation }) => {
 
   const image = route.params.post.image.imageURL;
 
-  const userId = useSelector((state) => state.user._id);
+  const userId = useSelector((state) => state.auth.user._id);
   const isLiked = Boolean(currentPost?.post?.likes[userId]);
   const numOfLikes = Object.keys(currentPost?.post?.likes).length;
 

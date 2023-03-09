@@ -8,7 +8,7 @@ const serverUrl = "https://retrieve-api.onrender.com";
 export const getServerState = async () => {
   try {
     const { data } = await axios.get(
-      `${serverUrl}/status`,
+      `${serverUrl}/api/status`,
       {},
       {
         headers: {
@@ -19,8 +19,10 @@ export const getServerState = async () => {
     // console.log(data);
     if (!data.server === "live") {
       Alert.alert(
-        "Server Offline",
-        "Retrieve Servers are Currently offline or on a maintenance break."
+        "Servers Offline",
+        "Retrieve Servers are Currently offline or on a maintenance break.",
+        [],
+        { cancelable: false }
       );
     }
 
@@ -28,9 +30,29 @@ export const getServerState = async () => {
   } catch (error) {
     // console.log(error.response.data);
     Alert.alert(
-      "Server Offline",
-      "Retrieve servers are Currently offline or on a maintenance break."
+      "Servers Offline",
+      "Retrieve servers are Currently offline or on a maintenance break.",
+      [],
+      { cancelable: false }
     );
+  }
+};
+
+export const getAppData = async () => {
+  try {
+    const { data } = await axios.get(
+      `${serverUrl}/api/app/appdata`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    console.log(error.response.data);
   }
 };
 

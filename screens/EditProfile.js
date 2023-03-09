@@ -23,7 +23,7 @@ import {
   deleteObject,
   uploadBytesResumable,
 } from "firebase/storage";
-import { setLoading, setSignIn } from "../redux/state";
+import { setLoading, setSignIn } from "../redux/state/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { storage } from "../utils/firebase-config";
 
@@ -32,9 +32,9 @@ const EditProfile = ({ route, navigation }) => {
   // const [cancelCurrent, setCancelCurrent] = useState(false);
   // const richText = useRef();
 
-  const userId = useSelector((state) => state.user._id);
-  const userData = useSelector((state) => state.user);
-  const isSurveyDone = useSelector((state) => state.isSurveyDone);
+  const userId = useSelector((state) => state.auth.user._id);
+  const userData = useSelector((state) => state.auth.user);
+  const isSurveyDone = useSelector((state) => state.auth.isSurveyDone);
 
   const [action, setAction] = useState("edit");
 

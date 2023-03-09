@@ -25,7 +25,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createPost, deletePost, editPost } from "../utils/requests/requests";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setPost } from "../redux/state";
+import { setLoading, setPost } from "../redux/state/auth";
 import { storage } from "../utils/firebase-config";
 
 function CreatePost({ route, navigation }) {
@@ -33,7 +33,7 @@ function CreatePost({ route, navigation }) {
   // const [cancelCurrent, setCancelCurrent] = useState(false);
   // const richText = useRef();
 
-  const userId = useSelector((state) => state.user._id);
+  const userId = useSelector((state) => state.auth.user._id);
   const postId = route.params?.post?._id;
 
   const [action, setAction] = useState("create");

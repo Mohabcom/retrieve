@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Progress from "react-native-progress";
-import { setSignOut } from "../redux/state";
+import { setSignOut } from "../redux/state/auth";
 
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const ProfileScreen = ({ navigation }) => {
   const handleSignOut = () => {
     dispatch(setSignOut());
   };
-  const userData = useSelector((state) => state.user);
+  const userData = useSelector((state) => state.auth.user);
 
   return (
     <SafeAreaView className="bg-white flex-1">

@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { setSignIn, setLoading } from "../redux/state";
+import { setSignIn, setLoading } from "../redux/state/auth";
 import { login, register } from "../utils/requests/requests";
 
 const LoginScreen = () => {

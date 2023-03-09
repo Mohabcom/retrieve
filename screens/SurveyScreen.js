@@ -12,103 +12,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import RadioGroup from "react-native-radio-buttons-group";
 import { updateProfile } from "../utils/requests/requests";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setSignIn } from "../redux/state";
-
-const questions = [
-  {
-    id: "1",
-    question: "How many meals containing meat do you eat per week ?",
-    answers: {
-      type: "radio",
-      values: [
-        { id: 1, label: "Daily", value: "daily" },
-        { id: 2, label: "Every 2 days", value: "every-2-days" },
-        { id: 3, label: "Twice a week", value: "twice-a-week" },
-        { id: 4, label: "Vegan", value: "vegan" },
-      ],
-    },
-  },
-  {
-    id: "2",
-    question:
-      "How many times do use a dishwasher or a washing machine or both?",
-    answers: {
-      type: "radio",
-      values: [
-        { id: 1, label: "Every 2 days", value: "every-2-days" },
-        { id: 2, label: "Daily", value: "daily" },
-        { id: 3, label: "Twice a week", value: "twice-a-week" },
-        { id: 4, label: "Never", value: "never" },
-      ],
-    },
-  },
-  {
-    id: "3",
-    question: "How often do you recycle?",
-    answers: {
-      type: "radio",
-      values: [
-        { id: 1, label: "Sometimes", value: "sometimes" },
-        { id: 2, label: "Often", value: "often" },
-        { id: 3, label: "Rarely", value: "rarely" },
-        { id: 4, label: "Never", value: "never" },
-      ],
-    },
-  },
-  {
-    id: "4",
-    question: "Do You travel using plane?",
-    answers: {
-      type: "radio",
-      values: [
-        { id: 1, label: "Often", value: "often" },
-        { id: 2, label: "Sometimes", value: "sometimes" },
-        { id: 3, label: "Rarely", value: "rarely" },
-        { id: 4, label: "Never", value: "never" },
-      ],
-    },
-  },
-  {
-    id: "5",
-    question: "How many hours of transportation?",
-    answers: {
-      type: "radio",
-      values: [
-        {
-          id: 1,
-          label: "from 320 to 450 min daily",
-          value: "from 320 to 450 min daily",
-        },
-        { id: 2, label: "220 to 320 min daily", value: "220 to 320 min daily" },
-        { id: 3, label: "121 to 220 min daily", value: "121 to 220 min daily" },
-        { id: 4, label: "45 to 120min daily", value: "45 to 120min daily" },
-      ],
-    },
-  },
-  {
-    id: "6",
-    question: "What is the amount of natural gas do you use per month?",
-    answers: {
-      type: "text",
-    },
-  },
-  {
-    id: "7",
-    question: "What is the amount of Electricity do you use per month?",
-    answers: {
-      type: "text",
-    },
-  },
-  {
-    id: "8",
-    question: "What is the amount of Fuel do you use per month?",
-    answers: {
-      type: "text",
-    },
-  },
-];
+import { setLoading, setSignIn } from "../redux/state/auth";
 
 const SurveyScreen = ({ route, navigation }) => {
+  const surveyData = useSelector((state) => state.appData.surveyData);
   const dispatch = useDispatch();
   const [action, setAction] = useState(route.params?.action);
   useState(() => {
@@ -116,16 +23,18 @@ const SurveyScreen = ({ route, navigation }) => {
   }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [radioButtons, setRadioButtons] = useState(questions[0].answers.values);
+  const [radioButtons, setRadioButtons] = useState(
+    surveyData[0].answers.values
+  );
   const [selectedRadio, setSelectedRadio] = useState("");
   const [textValue, setTextValue] = useState("");
 
-  const userId = useSelector((state) => state.user._id);
-  const fullName = useSelector((state) => state.user.fullName);
-  const about = useSelector((state) => state.user.about);
-  const address = useSelector((state) => state.user.address);
-  const dateOfBirth = useSelector((state) => state.user.dateOfBirth);
-  const gender = useSelector((state) => state.user.gender);
+  const userId = useSelector((state) => state.auth.user._id);
+  const fullName = useSelector((state) => state.auth.user.fullName);
+  const about = useSelector((state) => state.auth.user.about);
+  const address = useSelector((state) => state.auth.user.address);
+  const dateOfBirth = useSelector((state) => state.auth.user.dateOfBirth);
+  const gender = useSelector((state) => state.auth.user.gender);
   let isSurveyDone = false;
 
   const updateIsSurveyDone = async (isSurveyDone) => {
@@ -154,12 +63,12 @@ const SurveyScreen = ({ route, navigation }) => {
 
   const handleButton = () => {
     if (selectedRadio || textValue) {
-      if (currentIndex !== questions.length - 1) {
+      if (currentIndex !== surveyData.length - 1) {
         setCurrentIndex(currentIndex + 1);
         setSelectedRadio("");
         setTextValue("");
-        if (questions[currentIndex + 1].answers.type === "radio") {
-          setRadioButtons(questions[currentIndex + 1].answers.values);
+        if (surveyData[currentIndex + 1].answers.type === "radio") {
+          setRadioButtons(surveyData[currentIndex + 1].answers.values);
         }
       } else {
         isSurveyDone = true;
@@ -209,11 +118,11 @@ const SurveyScreen = ({ route, navigation }) => {
           <View className="flex items-center justify-between w-full">
             <View className="w-screen p-5 flex justify-start">
               <Text className="text-2xl tracking-wider text-center font-extrabold text-black">
-                {questions[currentIndex].question}
+                {surveyData[currentIndex].question}
               </Text>
             </View>
             <View className="px-4 w-full">
-              {questions[currentIndex].answers.type === "radio" ? (
+              {surveyData[currentIndex].answers.type === "radio" ? (
                 <RadioGroup
                   radioButtons={radioButtons}
                   onPress={onPressRadioButton}
@@ -253,7 +162,7 @@ const SurveyScreen = ({ route, navigation }) => {
           <Pressable
             onPress={handleButton}
             className={`w-full p-4 rounded-xl ${
-              questions[currentIndex].answers.type === "radio"
+              surveyData[currentIndex].answers.type === "radio"
                 ? selectedRadio
                   ? "bg-[#7203FF]"
                   : "bg-gray-500"
@@ -263,7 +172,7 @@ const SurveyScreen = ({ route, navigation }) => {
             }`}
           >
             <Text className="text-white text-[20px] text-center font-bold">
-              {currentIndex !== questions.length - 1
+              {currentIndex !== surveyData.length - 1
                 ? "Next Question"
                 : "Finish Survey"}
             </Text>

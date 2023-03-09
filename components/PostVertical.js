@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { likePost } from "../utils/requests/requests";
-import { setPost } from "../redux/state";
+import { setPost } from "../redux/state/auth";
 
 const PostVertical = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const post = props.item;
-  const userId = useSelector((state) => state.user._id);
+  const userId = useSelector((state) => state.auth.user._id);
   const isLiked = Boolean(post.likes[userId]);
   const numOfLikes = Object.keys(post.likes).length;
   const imageAspectRatio = (

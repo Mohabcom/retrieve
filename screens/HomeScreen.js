@@ -9,13 +9,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAllPosts } from "../utils/requests/requests";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setPosts } from "../redux/state";
+import { setLoading, setPosts } from "../redux/state/auth";
 import PostVertical from "../components/PostVertical";
 
 const HomeScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
-  const posts = useSelector((state) => state.posts);
+  const posts = useSelector((state) => state.auth.posts);
 
   const reloadPosts = async () => {
     const data = await getAllPosts();

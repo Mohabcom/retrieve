@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { setLoading, setSignIn } from "../redux/state";
+import { setLoading, setSignIn } from "../redux/state/auth";
 import { register } from "../utils/requests/requests";
 import Ionicons from "@expo/vector-icons/Ionicons";
 

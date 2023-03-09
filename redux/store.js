@@ -12,7 +12,8 @@ import {
 } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import state from "./state";
+import authSlice from "./state/auth";
+import appDataSlice from "./state/appData";
 
 const persistConfig = {
   key: "root",
@@ -20,7 +21,9 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-const persistedReducer = persistReducer(persistConfig, state);
+const reducers = combineReducers({ auth: authSlice, appData: appDataSlice });
+
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
   reducer: persistedReducer,

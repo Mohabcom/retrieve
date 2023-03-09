@@ -5,7 +5,7 @@ import CreatePost from "../screens/CreatePost";
 import PostScreen from "../screens/PostScreen";
 import SubCategoryScreen from "../screens/SubCategoryScreen";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../redux/state";
+import { setLoading } from "../redux/state/auth";
 import EditProfile from "../screens/EditProfile";
 import ProfileScreen from "../screens/ProfileScreen";
 import SettingsNavigator from "./SettingsNavigator";
@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const AppNavigator = () => {
-  // const isProfileFilled = useSelector((state) => state.user.fullName);
+  // const isProfileFilled = useSelector((state) => state.auth.user.fullName);
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(setLoading(false));
@@ -54,9 +54,9 @@ const AppNavigator = () => {
 };
 
 const AppStackNavigator = () => {
-  const userId = useSelector((state) => state.user._id);
-  const isProfileFilled = useSelector((state) => state.isProfileFilled);
-  const isSurveyDone = useSelector((state) => state.isSurveyDone);
+  const userId = useSelector((state) => state.auth.user._id);
+  const isProfileFilled = useSelector((state) => state.auth.isProfileFilled);
+  const isSurveyDone = useSelector((state) => state.auth.isSurveyDone);
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(setLoading(false));

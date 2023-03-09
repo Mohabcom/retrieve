@@ -1,13 +1,11 @@
 import MainNavigator from "./navigators/MainNavigator";
 import store, { persistor } from "./redux/store";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PersistGate } from "redux-persist/integration/react";
 import Loader from "./components/Loader";
 import { Text } from "react-native";
-import { useState } from "react";
-import { getServerState } from "./utils/requests/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
@@ -22,9 +20,6 @@ export default function App() {
   //   }
   // };
   // importData();
-  useState(() => {
-    getServerState();
-  }, []);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>

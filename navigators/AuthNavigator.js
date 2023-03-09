@@ -7,7 +7,7 @@ import WalkthroughScreen from "../screens/WalkthroughScreen";
 import LoginOptions from "../screens/LoginOptionsScreen";
 import OTPVerificationScreen from "../screens/OTPVerificationScreen";
 import { useDispatch } from "react-redux";
-import { setLoading } from "../redux/state";
+import { setLoading } from "../redux/state/auth";
 
 const Stack = createNativeStackNavigator();
 

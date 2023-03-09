@@ -1,8 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, SafeAreaView, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
+  const welcomeScreenTitle = useSelector(
+    (state) => state.appData.welcomeScreenTitle
+  );
+  const welcomeScreenDesc = useSelector(
+    (state) => state.appData.welcomeScreenDesc
+  );
   return (
     <SafeAreaView className="relative h-screen w-screen border-2 flex items-center justify-center">
       <Image
@@ -12,14 +19,9 @@ const WelcomeScreen = () => {
 
       <View className="flex items-center justify-end px-5 py-5 h-full w-full">
         <Text className="text-4xl tracking-wider text-center font-extrabold text-white">
-          Welcome to Retrieve! 👋
+          {welcomeScreenTitle}
         </Text>
-        <Text className="text-white my-4">
-          Retrieve is a student-led campaign aimed at raising awareness of the
-          importance of preserving and protecting the environment. We are
-          striving to make a positive impact on the world by encouraging people
-          to use green and sustainable practices.
-        </Text>
+        <Text className="text-white my-4">{welcomeScreenDesc}</Text>
         <Pressable
           onPress={() => {
             navigation.navigate("Walkthrough");

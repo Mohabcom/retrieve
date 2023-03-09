@@ -8,13 +8,13 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { setLoading } from "../redux/state";
+import { setLoading } from "../redux/state/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPosts } from "../utils/requests/requests";
 
 const CategoriesScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts);
+  const posts = useSelector((state) => state.auth.posts);
 
   const [metal, setMetal] = useState([]);
   const [numberOfPostsInMetal, setNumberOfPostsInMetal] = useState("0");

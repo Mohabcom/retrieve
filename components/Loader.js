@@ -2,7 +2,7 @@ import { View, ActivityIndicator, Modal } from "react-native";
 import { useSelector } from "react-redux";
 
 const Loader = ({ routes, navigation }) => {
-  const loading = useSelector((state) => state.loading);
+  const loading = useSelector((state) => state.auth.loading);
   return (
     <Modal
       transparent={true}
