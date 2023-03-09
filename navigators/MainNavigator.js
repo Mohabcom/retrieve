@@ -8,6 +8,7 @@ import { setAppData } from "../redux/state/appData";
 import { useState } from "react";
 import { getServerState, getAppData } from "../utils/requests/requests";
 import NetInfo from "@react-native-community/netinfo";
+import { Alert } from "react-native";
 
 const MainStackNavigator = () => {
   const dispatch = useDispatch();
