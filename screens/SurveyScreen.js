@@ -100,19 +100,29 @@ const SurveyScreen = ({ route, navigation }) => {
           <View className="w-full flex-row justify-start items-center my-2">
             {action === "not-first-time" && (
               <Pressable
-                className="px-5 py-2 z-10 h-12"
+                className="pl-6 pt-5 z-10 h-16"
                 onPress={() => navigation.goBack()}
               >
                 <Ionicons name="chevron-back-outline" size={26} />
               </Pressable>
             )}
             <View
-              className={`flex-row justify-center items-center w-full h-10 ${
+              className={`flex-row justify-center items-center w-full h-16 ${
                 action === "not-first-time" && "absolute"
               }`}
             >
               <Text className="text-lg text-center font-bold pt-2">Survey</Text>
             </View>
+            <Pressable
+              onPress={() => navigation.navigate("Home Screen")}
+              className={`flex-row justify-end items-center w-full h-16 absolute ${
+                action === "not-first-time" && "hidden"
+              }`}
+            >
+              <Text className="text-lg text-blue-700 text-center font-bold pr-10 pt-2 pb-1">
+                Skip
+              </Text>
+            </Pressable>
           </View>
 
           <View className="flex items-center justify-between w-full">
